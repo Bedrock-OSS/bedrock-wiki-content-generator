@@ -132,3 +132,4 @@ dmypy.json
 
 /packs
 !/custom_data/*.zip
+wiki_local_path.txt

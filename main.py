@@ -96,27 +96,42 @@ def main():
             with ZipFile('custom_data/'+element) as unzipping_file:
                 unzipping_file.extractall('custom_data/'+element.replace('.zip', ''))
 
+    # Wiki repo folder local path
+    if os.path.exists('wiki_local_path.txt'):
+        wiki_path_file = open('wiki_local_path.txt', 'r+')
+        wiki_path = wiki_path_file.read()
+        if wiki_path == '':
+            print('Select Wiki repository folder')
+            wiki_path = filedialog.askdirectory()
+            wiki_path_file.write(wiki_path)
+        else:
+            for line in wiki_path_file:
+                wiki_path = line
+                break
+    else:
+        print('Select Wiki repository folder')
+        with open('wiki_local_path.txt', 'w') as wiki_path_file:
+            wiki_path=filedialog.askdirectory()
+            wiki_path_file.write(wiki_path)
+
     # Data generation
     is_stable = DOWNLOAD_MODE == 'stable'
-    test_page_path = os.getcwd() + '/test-page.md'
-    print('Select Wiki repository folder')
-    # wiki_path = filedialog.askdirectory()
-    wiki_path = 'C:/Users/ghjvf/bedrock-wiki-vite'
-    rp_path = os.getcwd() + '/packs/rp/'
-    bp_path = os.getcwd() + '/packs/bp/'
-    custom_data_path = os.getcwd() + '/custom_data'
+    rp_path = 'packs/rp'
+    bp_path = 'packs/bp'
+    custom_data_path = 'custom_data'
+    test_page_path = 'test-page.md'
 
     # Content generation
     version = wcg.get_version(rp_path, is_stable)
-    # wiki_tools.upload_content(wiki_path+'/docs/blocks/block-sounds.md', wcg.get_block_sounds(rp_path, version)) # block sounds
-    # wiki_tools.upload_content(wiki_path+'/docs/commands/nbt-commands.md', wcg.can_place_on_everything(rp_path, version)) # can_place_on_everything
-    # wiki_tools.upload_content(wiki_path+'/docs/documentation/creative-categories.md', wcg.get_creative_categories_table(rp_path, version)) # creative categories
-    # wiki_tools.upload_content(wiki_path+'/docs/documentation/fog-ids.md', wcg.get_fogs_table(rp_path, version)) # fog ids
-    # wcg.generate_sound_definitions(rp_path, version, wiki_path+'/docs/documentation/sound-definitions.md') # sound definitions
-    # wcg.generate_biome_tags_tables(custom_data_path+'/biomes', version, wiki_path+'/docs/world-generation/biome-tags.md') # biome and tags tables
-    # wcg.generate_vu_spawn_rules(bp_path, version, wiki_path+'/docs/entities/vanilla-usage-spawn-rules.md', 8) # vanilla usage spawn rules
-    # wcg.generate_vu_items(bp_path, version, wiki_path+'/docs/items/vanilla-usage-items.md', 8) # vanilla usage items
-    # wcg.generate_vu_entities(bp_path, version, wiki_path+'/docs/entities/vanilla-usage-components.md', 8, 3) # vanilla usage entities
+    wiki_tools.upload_content(wiki_path+'/docs/blocks/block-sounds.md', wcg.get_block_sounds(rp_path, version)) # block sounds
+    wiki_tools.upload_content(wiki_path+'/docs/commands/nbt-commands.md', wcg.can_place_on_everything(rp_path, version)) # can_place_on_everything
+    wiki_tools.upload_content(wiki_path+'/docs/documentation/creative-categories.md', wcg.get_creative_categories_table(rp_path, version)) # creative categories
+    wiki_tools.upload_content(wiki_path+'/docs/documentation/fog-ids.md', wcg.get_fogs_table(rp_path, version)) # fog ids
+    wcg.generate_sound_definitions(rp_path, version, wiki_path+'/docs/documentation/sound-definitions.md') # sound definitions
+    wcg.generate_biome_tags_tables(custom_data_path+'/biomes', version, wiki_path+'/docs/world-generation/biome-tags.md') # biome and tags tables
+    wcg.generate_vu_spawn_rules(bp_path, version, wiki_path+'/docs/entities/vanilla-usage-spawn-rules.md', 8) # vanilla usage spawn rules
+    wcg.generate_vu_items(bp_path, version, wiki_path+'/docs/items/vanilla-usage-items.md', 8) # vanilla usage items
+    wcg.generate_vu_entities(bp_path, version, wiki_path+'/docs/entities/vanilla-usage-components.md', 8, 3) # vanilla usage entities
 
 
 if __name__ == "__main__":

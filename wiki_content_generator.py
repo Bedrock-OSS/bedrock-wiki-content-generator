@@ -78,7 +78,7 @@ def get_fogs_table(rp_path: str, version: str):
     fogs_table.append(version)
     return fogs_table
 
-def generate_sound_definitions(rp_path: str, version: str, wiki_page_path: str): # paste link!
+def generate_sound_definitions(rp_path: str, version: str, wiki_page_path: str):
     """Generates and writes data for https://wiki.bedrock.dev/documentation/sound-definitions.html"""
     with open(rp_path+'/sounds/sound_definitions.json', 'r') as sound_definitions:
         default_sound_definitions_data = json.load(sound_definitions)
@@ -105,7 +105,7 @@ def generate_sound_definitions(rp_path: str, version: str, wiki_page_path: str):
     wiki_page.write('    - MedicalJewel105\n')
     wiki_page.write('---\n\n')
     wiki_page.write('Sounds from `sound_definitions.json` sorted by categories and subcategories based on their names.\n')
-    wiki_page.write(f'This page was created with [Wiki Content Generator](). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.\n{version}\n\n')
+    wiki_page.write(f'This page was created with [Wiki Content Generator](https://github.com/Bedrock-OSS/bedrock-wiki-content-generator). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.\n{version}\n\n')
     for sound_category, sound_list in sound_definitions_data.items():
         wiki_page.write(f'## {sound_category}\n\n')
         previous_subcategory = ''
@@ -123,7 +123,7 @@ def generate_sound_definitions(rp_path: str, version: str, wiki_page_path: str):
                 wiki_page.write(f'`{sound_name}`\n\n')
     print('Updated sound definitions!')
 
-def generate_biome_tags_tables(biomes_folder_path: str, version: str, wiki_page_path: str): # paste link!
+def generate_biome_tags_tables(biomes_folder_path: str, version: str, wiki_page_path: str):
     """Generates and writes tables for https://wiki.bedrock.dev/world-generation/biome-tags.html"""
     all_biome_data = {}
     table_1_biome_id = ['Biome']
@@ -161,7 +161,7 @@ def generate_biome_tags_tables(biomes_folder_path: str, version: str, wiki_page_
     wiki_page.write('mentions:\n')
     wiki_page.write('    - MedicalJewel105\n')
     wiki_page.write('---\n\n')
-    wiki_page.write('This page was created with [Wiki Content Generator](). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.')
+    wiki_page.write('This page was created with [Wiki Content Generator](https://github.com/Bedrock-OSS/bedrock-wiki-content-generator). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.')
     wiki_page.write(f' {version}\n\n')
     wiki_page.write('## Biome tag per Biome\n\n')
     for line in biome_tag_per_biome:
@@ -171,7 +171,7 @@ def generate_biome_tags_tables(biomes_folder_path: str, version: str, wiki_page_
         wiki_page.write(line+'\n')
     print('Updated biome tags!')
 
-def generate_vu_spawn_rules(bp_path: str, version: str, wiki_page_path: str, example_amount: int): # paste link!
+def generate_vu_spawn_rules(bp_path: str, version: str, wiki_page_path: str, example_amount: int):
     """Generates and writes vanilla usage spawn rules: https://wiki.bedrock.dev/entities/vanilla-usage-spawn-rules.html"""
     components_data = {}
     # In generate_ functions data is stored in the following or similar way:
@@ -201,7 +201,7 @@ def generate_vu_spawn_rules(bp_path: str, version: str, wiki_page_path: str, exa
     wiki_page.write('mentions:\n')
     wiki_page.write('    - MedicalJewel105\n')
     wiki_page.write('---\n\n')
-    wiki_page.write('This page was created with [Wiki Content Generator](). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.')
+    wiki_page.write('This page was created with [Wiki Content Generator](https://github.com/Bedrock-OSS/bedrock-wiki-content-generator). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.')
     wiki_page.write(f'Note that not more than {example_amount} examples are shown for each component to keep this page fast to load. Namespace `minecraft` was also removed.')
     wiki_page.write(f' {version}\n\n')
     for component_name in sorted(components_data):
@@ -223,7 +223,7 @@ def generate_vu_spawn_rules(bp_path: str, version: str, wiki_page_path: str, exa
         wiki_page.write('</Spoiler>\n\n')
     print('Updated Vanilla Usage Spawn Rules!')
 
-def generate_vu_items(bp_path: str, version: str, wiki_page_path: str, example_amount: int): # paste link!
+def generate_vu_items(bp_path: str, version: str, wiki_page_path: str, example_amount: int):
     """Generates and writes vanilla usage item components: https://wiki.bedrock.dev/items/vanilla-usage-items.html"""
     components_data = {}
     for item_filename in os.listdir(bp_path+'/items/'):
@@ -243,7 +243,7 @@ def generate_vu_items(bp_path: str, version: str, wiki_page_path: str, example_a
     wiki_page.write('mentions:\n')
     wiki_page.write('    - MedicalJewel105\n')
     wiki_page.write('---\n\n')
-    wiki_page.write('This page was created with [Wiki Content Generator](). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.')
+    wiki_page.write('This page was created with [Wiki Content Generator](https://github.com/Bedrock-OSS/bedrock-wiki-content-generator). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.')
     wiki_page.write(f'Note that not more than {example_amount} examples are shown for each component to keep this page fast to load. Namespace `minecraft` was also removed.')
     wiki_page.write(f' {version}\n\n')
     for component_name in sorted(components_data):
@@ -265,7 +265,7 @@ def generate_vu_items(bp_path: str, version: str, wiki_page_path: str, example_a
         wiki_page.write('</Spoiler>\n\n')
     print('Updated Vanilla Usage Items!')
 
-def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, example_amount: int, entity_example_amount: int): # paste link!
+def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, example_amount: int, entity_example_amount: int):
     """Generates and writes vanilla usage components: https://wiki.bedrock.dev/entities/vanilla-usage-components.html.
     Example amount is max amount of examples for component from different entities, entity example amount - max amount of examples from entity."""
     components_data = {}
@@ -299,7 +299,7 @@ def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, exampl
     wiki_page.write('mentions:\n')
     wiki_page.write('    - MedicalJewel105\n')
     wiki_page.write('---\n\n')
-    wiki_page.write('This page was created with [Wiki Content Generator](). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.')
+    wiki_page.write('This page was created with [Wiki Content Generator](https://github.com/Bedrock-OSS/bedrock-wiki-content-generator). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.')
     wiki_page.write(f'Note that to keep this page fast to load and informative, there are not more than {example_amount} examples for each component and not more than {entity_example_amount} example(s) from each entity are shown. Namespace `minecraft` was also removed.')
     wiki_page.write(f' {version}\n\n')
     for component_name in sorted(components_data):
