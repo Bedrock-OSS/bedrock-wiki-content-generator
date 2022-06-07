@@ -1,6 +1,6 @@
 ---
 name: Question
-about: Tell us what you want to know.
+about: Want to know something?
 title: Question
 labels: question
 assignees: ''
@@ -8,4 +8,3 @@ assignees: ''
 ---
 
 For add-on help join Bedrock Add-Ons discord server!
-What you want to know
