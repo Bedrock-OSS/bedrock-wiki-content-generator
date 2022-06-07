@@ -130,6 +130,6 @@ dmypy.json
 
 # Vanilla packs
 
-/packs
+packs/
 !/custom_data/*.zip
 wiki_local_path.txt
