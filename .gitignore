@@ -128,8 +128,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Vanilla packs
-
-packs/
+# Packs
+packs
+!.gitkeep
 !/custom_data/*.zip
+
+# User data
 wiki_local_path.txt
