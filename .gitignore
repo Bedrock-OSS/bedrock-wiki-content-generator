@@ -131,3 +131,4 @@ dmypy.json
 # Vanilla packs
 
 /packs
+!/custom_data/*.zip

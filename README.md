@@ -45,7 +45,7 @@ Examples:
 
 The scripts uses temporary path `packs`, where vrp and vbp are downloaded. The path is not cleared after the execution, it conditionally removed and added again at the start of the script.
 
-You can add custom data, that is not in vanilla packs to `custom_data` folder. It can be used for content generation.
+You can add custom data (that is not in vanilla packs) to `custom_data` folder. Make sure it is zipped.
 
 **Note**:
 Last updated for version is based on min_engine_version in manifest.json, which is not always changed. Like if packs version is 1.18.31, it will still say "1.18.30".
