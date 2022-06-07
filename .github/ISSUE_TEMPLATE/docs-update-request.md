@@ -7,4 +7,4 @@ assignees: ''
 
 ---
 
-Request when new version cames.
+Request as new important version arrives.
