@@ -53,10 +53,13 @@ Last updated for version is based on min_engine_version in manifest.json, which 
 # FAQ
 
 **Q**: Where can I see everything what this script changes/generates?
+
 **A**: You can find what content this script generates in content_list.txt file.
 
 **Q**: I changed local path of wiki repo, how can I fix script's target folder?
+
 **A**: Delete wiki_local_path.txt file or clear it and run the script again.
 
 **Q**: Why 'Last updated for version' doesn't match example packs version?
+
 **A**: There aren't any actual version markers in vanilla packs, so `min_engine_version` is used. If something new (like entity, block or important fix) is added, this version gets changes.
