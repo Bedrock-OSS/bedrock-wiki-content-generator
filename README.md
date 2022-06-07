@@ -63,3 +63,7 @@ Last updated for version is based on min_engine_version in manifest.json, which 
 **Q**: Why 'Last updated for version' doesn't match example packs version?
 
 **A**: There aren't any actual version markers in vanilla packs, so `min_engine_version` is used. If something new (like entity, block or important fix) is added, this version gets changes.
+
+**Q**: I want to contribute to this project, where should I go?
+
+**A**: View CONTRIBUTING.md.
