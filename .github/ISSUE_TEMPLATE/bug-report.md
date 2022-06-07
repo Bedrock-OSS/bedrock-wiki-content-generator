@@ -8,6 +8,5 @@ assignees: MedicalJewel105
 ---
 
 **Bug name**
-What happened?
-**Suggestions**
+What happened and where?
 Any fix suggestions?
