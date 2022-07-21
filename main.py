@@ -130,8 +130,11 @@ def main():
     wcg.generate_sound_definitions(rp_path, version, wiki_path+'/docs/documentation/sound-definitions.md') # sound definitions
     wcg.generate_biome_tags_tables(custom_data_path+'/biomes', version, wiki_path+'/docs/world-generation/biome-tags.md') # biome and tags tables
     wcg.generate_vu_spawn_rules(bp_path, version, wiki_path+'/docs/entities/vanilla-usage-spawn-rules.md', 8) # vanilla usage spawn rules
+    wcg.generate_vu_spawn_rules(bp_path, version, wiki_path+'/docs/entities/vusr-full.md', -1) # full vanilla usage spawn rules
     wcg.generate_vu_items(bp_path, version, wiki_path+'/docs/items/vanilla-usage-items.md', 8) # vanilla usage items
+    wcg.generate_vu_items(bp_path, version, wiki_path+'/docs/items/vui-full.md', -1) # full vanilla usage items
     wcg.generate_vu_entities(bp_path, version, wiki_path+'/docs/entities/vanilla-usage-components.md', 8, 3) # vanilla usage entities
+    wcg.generate_vu_entities(bp_path, version, wiki_path+'/docs/entities/vuc-full.md', -1, -1) # full vanilla usage entities
 
 
 if __name__ == "__main__":
