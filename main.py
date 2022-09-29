@@ -135,6 +135,7 @@ def main():
     wcg.generate_vu_items(bp_path, version, wiki_path+'/docs/items/vui-full.md', -1) # full vanilla usage items
     wcg.generate_vu_entities(bp_path, version, wiki_path+'/docs/entities/vanilla-usage-components.md', 8, 3) # vanilla usage entities
     wcg.generate_vu_entities(bp_path, version, wiki_path+'/docs/entities/vuc-full.md', -1, -1) # full vanilla usage entities
+    print(version)
 
 
 if __name__ == "__main__":

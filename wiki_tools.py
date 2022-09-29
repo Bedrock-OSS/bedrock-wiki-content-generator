@@ -18,11 +18,11 @@ def upload_content(page_path: str, *args):
             dumper_end_counter += 1
 
     if dumper_start_counter != dumper_end_counter:
-        print(f'Error! {page_path} misses one or more start/end flag!')
+        print(f'Error! {page_path} is missing one or more start/end flag!')
         exit()
     dumper_flag_counter = dumper_start_counter
     if dumper_flag_counter != len(dumping_content):
-        print(f'Error! {page_path} amount of given arguments and amount of pairs of flags must match!')
+        print(f'Error! {page_path}: Flag pairs and content amount must match!')
         exit()
 
     start_flag_index = 0
