@@ -3,142 +3,131 @@ Usage: Run the script and optionally add commandline arguments to it. Default
 configuration (no arguments) downloads the stable version of packs.
 
 --skip_download
---download_mode ["stable" or "beta"]
---rp_url <the url to download resourcepack>
---bp_url <the url to download behaviorpack>
+--download_mode ["stable" or "preview"]
 
-`--skip_download` also removes pack extraction.
 
 Examples:
-    Downloading beta packs and extracting data from them:
-        python main.py --download_mode beta
+    Downloading preview packs and extracting data from them:
+        python main.py --download_mode preview
 
     Downloading packs from custom urls
-        python main --bp_url example.com --rp_url example1.com
+        python main--repo_url example.com
 
 The scripts uses temporary path `packs`. The path is not cleared after the
 execution, it conditionally removed and added again at the start of the script.
 """
+
 import wiki_tools
 import wiki_content_generator as wcg
 from tkinter import filedialog
-import os
-import downloader
+from os import get_handle_inheritable, path, makedirs, listdir, chdir
+from downloader import download_file, find_release
 from zipfile import ZipFile
 import sys
 import shutil
 
 
-print('Welcome to Bedrock Wiki Content Generator!')
+def launch() -> None:
+    print('Welcome to Bedrock Wiki Content Generator!')
+    argv = sys.argv
+    global DOWNLOAD_MODE, SKIP_DOWNLOAD, DOWNLOAD_LINK, VERSION_TAG
 
-argv = sys.argv
+    if '--download_mode' in argv and len(argv) > argv.index('--download_mode'):
+        DOWNLOAD_MODE = argv[argv.index('--download_mode')+1]
+    else:
+        DOWNLOAD_MODE = 'stable'
+    if DOWNLOAD_MODE in ['stable', 'preview']:
+        VERSION_TAG = {'stable': 'main', 'preview': 'preview'}[DOWNLOAD_MODE]
+        DOWNLOAD_LINK = find_release('https://api.github.com/repos/Mojang/bedrock-samples/releases?per_page=10&page=1', VERSION_TAG)
+    else:
+        print(f'Unknown download mode {DOWNLOAD_MODE}.')
+        exit()
 
-try:
-    DOWNLOAD_MODE = argv[argv.index('--download_mode')+1]
-except:
-    DOWNLOAD_MODE = 'stable'
-
-if DOWNLOAD_MODE == 'stable':
-    RP_URL = 'https://aka.ms/resourcepacktemplate'
-    BP_URL = 'https://aka.ms/behaviorpacktemplate'
-elif DOWNLOAD_MODE == 'beta':
-    RP_URL = 'https://aka.ms/MinecraftBetaResources'
-    BP_URL = 'https://aka.ms/MinecraftBetaBehaviors'
-else:
-    raise Exception(f'Unknown download mode {DOWNLOAD_MODE}.')
-
-try:
-    RP_URL = argv[argv.index('--rp_url')+1]
-except:
-    pass
-
-try:
-    RP_URL = argv[argv.index('--rp_url')+1]
-except:
-    pass
-
-SKIP_DOWNLOAD = '--skip_download' in argv
+    SKIP_DOWNLOAD = '--skip_download' in argv
+    main()
 
 
-def main():
+def main() -> None:
+    # Set some variables
+    chdir(path.dirname(path.realpath(__file__)))
+    rp_path = path.join('packs', 'resource_pack')
+    bp_path = path.join('packs', 'behavior_pack')
+    repo_save_path = path.join('packs', 'vp.zip')
+    wiki_path_file = 'wiki_local_path.txt'
+    is_stable = DOWNLOAD_MODE == 'stable'
+    custom_data_path = 'custom_data'
+    test_page_path = 'test-page.md'
+    
     # Download & extract packs
     if not SKIP_DOWNLOAD:
-        if os.path.exists('packs'):
-            shutil.rmtree('packs')
-        os.makedirs('packs', exist_ok=True)
+        shutil.rmtree('packs', True)
+        makedirs('packs', exist_ok=True)
 
         print('Downloading files...')
-        downloader.download_file(RP_URL, 'packs/rp.zip')
-        downloader.download_file(BP_URL, 'packs/bp.zip')
+        download_file(DOWNLOAD_LINK, repo_save_path)
         print('Downloaded!')
 
-        if os.path.exists('packs/rp'):
-            shutil.rmtree('packs/rp')
+    print('Extracting files...')
+    with ZipFile(repo_save_path) as unzipping_file:
+        unzipping_file.extractall('packs')
+    print('Extracted!')
 
-        print('Extracting resource pack...')
-        with ZipFile('packs/rp.zip') as unzipping_file:
-            unzipping_file.extractall('packs/rp')
-        print('Extracted!')
+    packs_contents = listdir('packs')
+    if 'vp.zip' in packs_contents:
+        packs_contents.remove('vp.zip')
+    extracted_folder = packs_contents[0]
 
-        if os.path.exists('packs/bp'):
-            shutil.rmtree('packs/bp')
+    print('Copying packs...')
+    shutil.move(path.join('packs', extracted_folder, 'behavior_pack'), 'packs')
+    shutil.move(path.join('packs', extracted_folder, 'resource_pack'), 'packs')
+    print('Copied!')
 
-        print('Extracting behavior pack...')
-        with ZipFile('packs/bp.zip') as unzipping_file:
-            unzipping_file.extractall('packs/bp')
-        print('Extracted!')
+    shutil.rmtree(path.join('packs', extracted_folder))
 
     # Extract custom data
-    for element in os.listdir('custom_data/'):
+    for element in listdir('custom_data'):
         if not element.endswith('.zip'):
-            shutil.rmtree('custom_data/'+element)
+            shutil.rmtree(path.join('custom_data', element))
         else:
-            with ZipFile('custom_data/'+element) as unzipping_file:
-                unzipping_file.extractall('custom_data/'+element.replace('.zip', ''))
+            with ZipFile(path.join('custom_data', element)) as unzipping_file:
+                unzipping_file.extractall(path.join('custom_data', element.replace('.zip', '')))
 
     # Wiki repo folder local path
-    if os.path.exists('wiki_local_path.txt'):
-        wiki_path_file = open('wiki_local_path.txt', 'r+')
-        wiki_path = wiki_path_file.read()
+    if path.exists(wiki_path_file):
+        with open(wiki_path_file, 'r+') as wiki_path_file:
+            wiki_path = wiki_path_file.readline()
         if wiki_path == '':
             print('Select Wiki repository folder')
             wiki_path = filedialog.askdirectory()
             wiki_path_file.write(wiki_path)
-        else:
-            for line in wiki_path_file:
-                wiki_path = line
-                break
     else:
         print('Select Wiki repository folder')
-        with open('wiki_local_path.txt', 'w') as wiki_path_file:
-            wiki_path=filedialog.askdirectory()
+        with open(wiki_path_file, 'w') as wiki_path_file:
+            wiki_path = filedialog.askdirectory()
             wiki_path_file.write(wiki_path)
 
-    # Data generation
-    is_stable = DOWNLOAD_MODE == 'stable'
-    rp_path = 'packs/rp'
-    bp_path = 'packs/bp'
-    custom_data_path = 'custom_data'
-    test_page_path = 'test-page.md'
-
     # Content generation
-    version = wcg.get_version(rp_path, is_stable)
-    wiki_tools.upload_content(wiki_path+'/docs/blocks/block-sounds.md', wcg.get_block_sounds(rp_path, version)) # block sounds
-    wiki_tools.upload_content(wiki_path+'/docs/commands/nbt-commands.md', wcg.can_place_on_everything(rp_path, version)) # can_place_on_everything
-    wiki_tools.upload_content(wiki_path+'/docs/documentation/creative-categories.md', wcg.get_creative_categories_table(rp_path, version)) # creative categories
-    wiki_tools.upload_content(wiki_path+'/docs/documentation/fog-ids.md', wcg.get_fogs_table(rp_path, version)) # fog ids
-    wcg.generate_sound_definitions(rp_path, version, wiki_path+'/docs/documentation/sound-definitions.md') # sound definitions
-    wcg.generate_biome_tags_tables(custom_data_path+'/biomes', version, wiki_path+'/docs/world-generation/biome-tags.md') # biome and tags tables
-    wcg.generate_vu_spawn_rules(bp_path, version, wiki_path+'/docs/entities/vanilla-usage-spawn-rules.md', 8) # vanilla usage spawn rules
-    wcg.generate_vu_spawn_rules(bp_path, version, wiki_path+'/docs/entities/vusr-full.md', -1) # full vanilla usage spawn rules
-    wcg.generate_vu_items(bp_path, version, wiki_path+'/docs/items/vanilla-usage-items.md', 8) # vanilla usage items
-    wcg.generate_vu_items(bp_path, version, wiki_path+'/docs/items/vui-full.md', -1) # full vanilla usage items
-    wcg.generate_vu_entities(bp_path, version, wiki_path+'/docs/entities/vanilla-usage-components.md', 8, 3) # vanilla usage entities
-    wcg.generate_vu_entities(bp_path, version, wiki_path+'/docs/entities/vuc-full.md', -1, -1) # full vanilla usage entities
+    print('---')
+    version = wcg.get_version(rp_path, is_stable) # update
+    wiki_tools.upload_content(path.join(wiki_path, 'docs', 'blocks', 'block-sounds.md'), wcg.get_block_sounds(rp_path, version)) # block sounds
+    wiki_tools.upload_content(path.join(wiki_path, 'docs', 'commands', 'nbt-commands.md'), wcg.can_place_on_everything(rp_path, version)) # can_place_on_everything
+    wiki_tools.upload_content(path.join(wiki_path, 'docs', 'documentation', 'creative-categories.md'), wcg.get_creative_categories_table(rp_path, version)) # creative categories
+    wiki_tools.upload_content(path.join(wiki_path, 'docs', 'documentation', 'fog-ids.md'), wcg.get_fogs_table(rp_path, version)) # fog ids
+    wcg.generate_sound_definitions(rp_path, version, path.join(wiki_path, 'docs', 'documentation', 'sound-definitions.md')) # sound definitions
+    wcg.generate_biome_tags_tables(path.join(custom_data_path, 'biomes'), version, path.join(wiki_path, 'docs', 'world-generation', 'biome-tags.md')) # biome and tags tables
+    wcg.generate_vu_spawn_rules(bp_path, version, path.join(wiki_path, 'docs', 'entities', 'vanilla-usage-spawn-rules.md'), 8) # vanilla usage spawn rules
+    wcg.generate_vu_spawn_rules(bp_path, version, path.join(wiki_path, 'docs', 'entities', 'vusr-full.md'), -1) # full vanilla usage spawn rules
+    wcg.generate_vu_items(bp_path, version, path.join(wiki_path, 'docs', 'items', 'vanilla-usage-items.md'), 8) # vanilla usage items
+    wcg.generate_vu_items(bp_path, version, path.join(wiki_path, 'docs', 'items', 'vui-full.md'), -1) # full vanilla usage items
+    wcg.generate_vu_entities(bp_path, version, path.join(wiki_path, 'docs', 'entities', 'vanilla-usage-components.md'), 8, 3) # vanilla usage entities
+    wcg.generate_vu_entities(bp_path, version, path.join(wiki_path, 'docs', 'entities', 'vuc-full.md'), -1, -1) # full vanilla usage entities
     print(version)
+
+    # Remove files
+    shutil.rmtree(rp_path)
+    shutil.rmtree(bp_path)
+    print('Finished!')
 
 
 if __name__ == "__main__":
-    main()
-
-print('Finished!')
+    launch()

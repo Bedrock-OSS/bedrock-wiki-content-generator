@@ -27,19 +27,13 @@ If you want to change configuration, add:
 
 ```
 --skip_download
---download_mode ["stable" or "beta"]
---rp_url <the url to download resourcepack>
---bp_url <the url to download behaviorpack>
+--download_mode ["stable" or "preview"]
 ```
 
-`--skip_download` also removes pack extraction.
+Example:
 
-Examples:
-- Download beta packs and extract data from them:
-    `python main.py --download_mode beta`
-
-- Downloading packs from custom urls:
-    `python main --bp_url example1.com --rp_url example2.com`
+-   Generate docs for preview version: `python main.py --download_mode preview`
+-   Skip download (used when extracting from other resources): `python main.py --skip_download`
 
 # Data
 
@@ -53,17 +47,13 @@ Last updated for version is based on min_engine_version in manifest.json, which 
 # FAQ
 
 **Q**: Where can I see everything what this script changes/generates?
-
 **A**: You can find what content this script generates in content_list.txt file.
 
 **Q**: I changed local path of wiki repo, how can I fix script's target folder?
-
 **A**: Delete wiki_local_path.txt file or clear it and run the script again.
 
 **Q**: Why 'Last updated for version' doesn't match example packs version?
-
 **A**: There aren't any actual version markers in vanilla packs, so `min_engine_version` is used. If something new (like entity, block or important fix) is added, this version gets changes.
 
 **Q**: I want to contribute to this project, where should I go?
-
 **A**: View CONTRIBUTING.md.

@@ -19,11 +19,11 @@ def upload_content(page_path: str, *args):
 
     if dumper_start_counter != dumper_end_counter:
         print(f'Error! {page_path} is missing one or more start/end flag!')
-        exit()
+        return
     dumper_flag_counter = dumper_start_counter
     if dumper_flag_counter != len(dumping_content):
-        print(f'Error! {page_path}: Flag pairs and content amount must match!')
-        exit()
+        print(f'Error! {page_path}: Flag pairs and content amount does not match!')
+        return
 
     start_flag_index = 0
     updating_wiki_page = []
@@ -76,7 +76,7 @@ def upload_content(page_path: str, *args):
         for line in updating_wiki_page:
             wiki_page.write(line)
 
-    print(page_path[page_path.rfind('/')+1:]+' - successfully uploaded!')
+    print(page_path[page_path.rfind('/')+1:]+' - updated!')
 
 def table(sort_column_index: int, *args: list):
     """Creates a table from given lists (one list - one column). If you don't want your table to be sorted, set sort_column_index to -1."""
