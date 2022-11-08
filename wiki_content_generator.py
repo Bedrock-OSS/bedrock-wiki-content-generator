@@ -1,20 +1,23 @@
 import json
 import jsonc_decoder
 import wiki_tools
-import os
 from os import path, listdir
+from datetime import date
 
 
-def get_version(rp_path: str, is_stable: bool):
+def get_custom_data_version() -> str:
+    return f'*Last updated on {date.today().strftime("%d %B %Y")}*'
+
+def get_version(rp_path: str, is_stable: bool) -> str: # TODO do not use this in docs generated from custom data
     """Gets `min_engine_version` (which is used as version) from vrp."""
     with open(path.join(rp_path, 'manifest.json'), 'r') as manifest:
         manifest_data = json.load(manifest)
     version = f'*Last updated for {".".join(map(str, manifest_data["header"]["min_engine_version"]))}*'
     if not is_stable:
-        version = version[::-1] + ' (beta)*'
+        version = version[::-1] + ' (preview)*'
     return version
 
-def get_block_sounds(rp_path: str, version: str):
+def get_block_sounds(rp_path: str, version: str) -> str:
     """Generates list with all possible values for 'sound' in blocks.json. Used in https://wiki.bedrock.dev/blocks/block-sounds.html"""
     block_sounds = []
     invalid_values = []
@@ -29,7 +32,7 @@ def get_block_sounds(rp_path: str, version: str):
     page_content = f'```json\n{json.dumps(block_sounds, indent=4)}\n```\n{version}'
     return page_content
 
-def can_place_on_everything(rp_path: str, version: str):
+def can_place_on_everything(rp_path: str, version: str) -> str:
     """Generates a commands wrapped in codeheader for https://wiki.bedrock.dev/commands/nbt-commands.html#canplaceon-everything"""
     blocks_list = []
     invalid_values = ['format_version']
@@ -47,7 +50,7 @@ def can_place_on_everything(rp_path: str, version: str):
     can_place_on_everything_command = f'<CodeHeader></CodeHeader>\n\n```json\n{can_place_on_everything_command}\n```\n\n' + version
     return can_place_on_everything_command
 
-def get_creative_categories_table(rp_path: str, version: str):
+def get_creative_categories_table(rp_path: str, version: str) -> list:
     """Generates table for https://wiki.bedrock.dev/documentation/creative-categories.html#list-of-creative-categories"""
     lines_with_categories = []
     categories = []
@@ -63,7 +66,7 @@ def get_creative_categories_table(rp_path: str, version: str):
     categories_table.append(version)
     return categories_table
 
-def get_fogs_table(rp_path: str, version: str):
+def get_fogs_table(rp_path: str, version: str) -> list:
     """Generates table for https://wiki.bedrock.dev/documentation/fog-ids.html#auto-generated"""
     fogs_table = []
     biome_names = []
@@ -79,7 +82,7 @@ def get_fogs_table(rp_path: str, version: str):
     fogs_table.append(version)
     return fogs_table
 
-def generate_sound_definitions(rp_path: str, version: str, wiki_page_path: str):
+def generate_sound_definitions(rp_path: str, version: str, wiki_page_path: str) -> None:
     """Generates and writes data for https://wiki.bedrock.dev/documentation/sound-definitions.html"""
     with open(path.join(rp_path, 'sounds', 'sound_definitions.json'), 'r') as sound_definitions:
         default_sound_definitions_data = json.load(sound_definitions)
@@ -120,7 +123,7 @@ def generate_sound_definitions(rp_path: str, version: str, wiki_page_path: str):
                 wiki_page.write(f'`{sound_name}`\n\n')
     print('Updated sound definitions!')
 
-def generate_biome_tags_tables(biomes_folder_path: str, version: str, wiki_page_path: str):
+def generate_biome_tags_tables(biomes_folder_path: str, version: str, wiki_page_path: str) -> None:
     """Generates and writes tables for https://wiki.bedrock.dev/world-generation/biome-tags.html"""
     all_biome_data = {}
     table_1_biome_id = ['Biome']
@@ -168,7 +171,7 @@ def generate_biome_tags_tables(biomes_folder_path: str, version: str, wiki_page_
         wiki_page.write(line+'\n')
     print('Updated biome tags!')
 
-def generate_vu_spawn_rules(bp_path: str, version: str, wiki_page_path: str, example_amount: int):
+def generate_vu_spawn_rules(bp_path: str, version: str, wiki_page_path: str, example_amount: int) -> None:
     """Generates and writes vanilla usage spawn rules: https://wiki.bedrock.dev/entities/vanilla-usage-spawn-rules.html or https://wiki.bedrock.dev/entities/vusr-full.html. To bypass the example limit, set it to -1."""
     if example_amount == -1:
         is_full = True
@@ -233,7 +236,7 @@ def generate_vu_spawn_rules(bp_path: str, version: str, wiki_page_path: str, exa
         wiki_page.write('</Spoiler>\n\n')
     print('Updated Vanilla Usage Spawn Rules!')
 
-def generate_vu_items(bp_path: str, version: str, wiki_page_path: str, example_amount: int):
+def generate_vu_items(bp_path: str, version: str, wiki_page_path: str, example_amount: int) -> None:
     """Generates and writes vanilla usage item components: https://wiki.bedrock.dev/items/vanilla-usage-items.html or https://wiki.bedrock.dev/items/vui-full.html. To bypass the example limit, set it to -1."""
     if example_amount == -1:
         is_full = True
@@ -288,7 +291,7 @@ def generate_vu_items(bp_path: str, version: str, wiki_page_path: str, example_a
         wiki_page.write('</Spoiler>\n\n')
     print('Updated Vanilla Usage Items!')
 
-def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, example_amount: int, entity_example_amount: int):
+def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, example_amount: int, entity_example_amount: int) -> None:
     """Generates and writes vanilla usage components: https://wiki.bedrock.dev/entities/vanilla-usage-components.html.
     Example amount is max amount of examples for component from different entities, entity example amount - max amount of examples from entity. Use -1 to bypass."""
     if entity_example_amount == -1:

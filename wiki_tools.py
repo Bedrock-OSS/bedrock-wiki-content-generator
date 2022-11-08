@@ -1,4 +1,4 @@
-def upload_content(page_path: str, *args):
+def upload_content(page_path: str, *args) -> None:
     """Uploads content to page. Takes page path and content list(s)."""
 
     start_flag_name = '<!-- page_dumper_start -->'
@@ -78,7 +78,7 @@ def upload_content(page_path: str, *args):
 
     print(page_path[page_path.rfind('/')+1:]+' - updated!')
 
-def table(sort_column_index: int, *args: list):
+def table(sort_column_index: int, *args: list) -> list:
     """Creates a table from given lists (one list - one column). If you don't want your table to be sorted, set sort_column_index to -1."""
     columns = args
     generated_table = []

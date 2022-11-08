@@ -108,13 +108,14 @@ def main() -> None:
 
     # Content generation
     print('---')
-    version = wcg.get_version(rp_path, is_stable) # update
+    version = wcg.get_version(rp_path, is_stable)
+    custom_data_version = wcg.get_custom_data_version()
     wiki_tools.upload_content(path.join(wiki_path, 'docs', 'blocks', 'block-sounds.md'), wcg.get_block_sounds(rp_path, version)) # block sounds
     wiki_tools.upload_content(path.join(wiki_path, 'docs', 'commands', 'nbt-commands.md'), wcg.can_place_on_everything(rp_path, version)) # can_place_on_everything
     wiki_tools.upload_content(path.join(wiki_path, 'docs', 'documentation', 'creative-categories.md'), wcg.get_creative_categories_table(rp_path, version)) # creative categories
     wiki_tools.upload_content(path.join(wiki_path, 'docs', 'documentation', 'fog-ids.md'), wcg.get_fogs_table(rp_path, version)) # fog ids
     wcg.generate_sound_definitions(rp_path, version, path.join(wiki_path, 'docs', 'documentation', 'sound-definitions.md')) # sound definitions
-    wcg.generate_biome_tags_tables(path.join(custom_data_path, 'biomes'), version, path.join(wiki_path, 'docs', 'world-generation', 'biome-tags.md')) # biome and tags tables
+    wcg.generate_biome_tags_tables(path.join(custom_data_path, 'biomes'), custom_data_version, path.join(wiki_path, 'docs', 'world-generation', 'biome-tags.md')) # biome and tags tables
     wcg.generate_vu_spawn_rules(bp_path, version, path.join(wiki_path, 'docs', 'entities', 'vanilla-usage-spawn-rules.md'), 8) # vanilla usage spawn rules
     wcg.generate_vu_spawn_rules(bp_path, version, path.join(wiki_path, 'docs', 'entities', 'vusr-full.md'), -1) # full vanilla usage spawn rules
     wcg.generate_vu_items(bp_path, version, path.join(wiki_path, 'docs', 'items', 'vanilla-usage-items.md'), 8) # vanilla usage items
