@@ -7,10 +7,11 @@ def download_file(download_url: str, save_path: str) -> None:
     with open(save_path, 'wb') as file:
         file.write(downloaded_data)
 
-def find_release(repo_link: str, tag: str) -> str:
+def find_release(repo_link: str, tag: str) -> tuple:
     response = requests.get(repo_link)
     releases = response.json()
     for release in releases:
         if release['target_commitish'] == tag:
             link = release['zipball_url']
-            return link
+            version = release['tag_name'][1:]
+            return (link, version)

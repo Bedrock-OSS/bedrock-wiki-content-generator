@@ -1,3 +1,4 @@
+.vscode/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -135,3 +136,8 @@ packs
 
 # User data
 wiki_local_path.txt
+
+# Release watcher
+latest_release.txt
+release_watcher.py
+watcher.log

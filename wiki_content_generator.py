@@ -234,7 +234,7 @@ def generate_vu_spawn_rules(bp_path: str, version: str, wiki_page_path: str, exa
             if component_usage_counter == example_amount:
                 break
         wiki_page.write('</Spoiler>\n\n')
-    print('Updated Vanilla Usage Spawn Rules!')
+    print('Updated Vanilla Usage Spawn Rules!' + ' (full)'*(not bool(example_amount+1)))
 
 def generate_vu_items(bp_path: str, version: str, wiki_page_path: str, example_amount: int) -> None:
     """Generates and writes vanilla usage item components: https://wiki.bedrock.dev/items/vanilla-usage-items.html or https://wiki.bedrock.dev/items/vui-full.html. To bypass the example limit, set it to -1."""
@@ -289,7 +289,7 @@ def generate_vu_items(bp_path: str, version: str, wiki_page_path: str, example_a
             if component_usage_counter == example_amount:
                 break
         wiki_page.write('</Spoiler>\n\n')
-    print('Updated Vanilla Usage Items!')
+    print('Updated Vanilla Usage Items!' + ' (full)'*(not bool(example_amount+1)))
 
 def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, example_amount: int, entity_example_amount: int) -> None:
     """Generates and writes vanilla usage components: https://wiki.bedrock.dev/entities/vanilla-usage-components.html.
@@ -363,4 +363,4 @@ def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, exampl
             if component_usage_counter == example_amount:
                 break
         wiki_page.write('</Spoiler>\n\n')
-    print('Updated Vanilla Usage Entities!')
+    print('Updated Vanilla Usage Entities!' + ' (full)'*(not bool((example_amount+1)*(entity_example_amount+1))))
