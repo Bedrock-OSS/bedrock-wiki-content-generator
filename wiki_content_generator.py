@@ -173,10 +173,7 @@ def generate_biome_tags_tables(biomes_folder_path: str, version: str, wiki_page_
 
 def generate_vu_spawn_rules(bp_path: str, version: str, wiki_page_path: str, example_amount: int) -> None:
     """Generates and writes vanilla usage spawn rules: https://wiki.bedrock.dev/entities/vanilla-usage-spawn-rules.html or https://wiki.bedrock.dev/entities/vusr-full.html. To bypass the example limit, set it to -1."""
-    if example_amount == -1:
-        is_full = True
-    else:
-        is_full = False
+    is_full = example_amount == -1
     components_data = {}
     # In generate_ functions data is stored in the following or similar way:
     # components_data = {
@@ -200,48 +197,41 @@ def generate_vu_spawn_rules(bp_path: str, version: str, wiki_page_path: str, exa
                 components_data[component_name].append(component_usage)
     wiki_page = open(wiki_page_path, 'w')
     wiki_page.write('---\n')
-    if is_full:
-        wiki_page.write('title: Vanilla Usage Spawn Rules - Full\n')
-    else:
-        wiki_page.write('title: Vanilla Usage Spawn Rules\n')
+    wiki_page.write(f'title: Vanilla Usage Spawn Rules{" - Full"*is_full}\n')
     wiki_page.write('category: Documentation\n')
     wiki_page.write('mentions:\n')
     wiki_page.write('    - MedicalJewel105\n')
-    if is_full:
-        wiki_page.write('hidden: true\n')
+    if is_full: wiki_page.write('hidden: true\n')
     wiki_page.write('---\n\n')
     wiki_page.write('This page was created with [Wiki Content Generator](https://github.com/Bedrock-OSS/bedrock-wiki-content-generator). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.\n')
     if is_full:
-        wiki_page.write(f'Includes all examples. Namespace `minecraft` was also removed.')
+        wiki_page.write(f'Includes all examples. Namespace `minecraft` and some formatting has been removed to make the page load quickly.')
     else:
         wiki_page.write(f'Note that not more than {example_amount} examples are shown for each component to keep this page fast to load. Namespace `minecraft` was also removed.')
         wiki_page.write('If you want to see full page, you can do it [here](/entities/vusr-full).') # not affected through main.py
     wiki_page.write(f' {version}\n\n')
     for component_name in sorted(components_data):
         wiki_page.write('## '+component_name.replace('minecraft:', '')+'\n\n')
-        wiki_page.write('<Spoiler title="Show">\n\n')
+        if not is_full: wiki_page.write('<Spoiler title="Show">\n\n')
         component_usage_counter = 0
         current_entity = ''
         for example in components_data[component_name]:
             if current_entity != example['entity']:
                 current_entity = example['entity']
                 wiki_page.write(example['entity'].replace('minecraft:', '')+'\n\n')
-            wiki_page.write('<CodeHeader></CodeHeader>\n\n')
+            if not is_full: wiki_page.write('<CodeHeader></CodeHeader>\n\n')
             wiki_page.write('```json\n')
             wiki_page.write(f'"{component_name}": '+json.dumps(example[component_name], indent=4)+'\n')
             wiki_page.write('```\n\n')
             component_usage_counter += 1
             if component_usage_counter == example_amount:
                 break
-        wiki_page.write('</Spoiler>\n\n')
-    print('Updated Vanilla Usage Spawn Rules!' + ' (full)'*(not bool(example_amount+1)))
+        if not is_full: wiki_page.write('</Spoiler>\n\n')
+    print('Updated Vanilla Usage Spawn Rules!' + ' (full)'*is_full)
 
 def generate_vu_items(bp_path: str, version: str, wiki_page_path: str, example_amount: int) -> None:
     """Generates and writes vanilla usage item components: https://wiki.bedrock.dev/items/vanilla-usage-items.html or https://wiki.bedrock.dev/items/vui-full.html. To bypass the example limit, set it to -1."""
-    if example_amount == -1:
-        is_full = True
-    else:
-        is_full = False
+    is_full = example_amount == -1
     components_data = {}
     for item_filename in listdir(path.join(bp_path, 'items')):
         with open(path.join(bp_path, 'items', item_filename)) as item_file:
@@ -255,49 +245,42 @@ def generate_vu_items(bp_path: str, version: str, wiki_page_path: str, example_a
             components_data[component_name].append(component_usage)
     wiki_page = open(wiki_page_path, 'w')
     wiki_page.write('---\n')
-    if is_full:
-        wiki_page.write('title: Vanilla Usage Components - Full\n')
-    else:
-        wiki_page.write('title: Vanilla Usage Components\n')
+    wiki_page.write(f'title: Vanilla Usage Components{" - Full"*is_full}\n')
     wiki_page.write('category: Documentation\n')
     wiki_page.write('mentions:\n')
     wiki_page.write('    - MedicalJewel105\n')
-    if is_full:
-        wiki_page.write('hidden: true\n')
+    if is_full: wiki_page.write('hidden: true\n')
     wiki_page.write('---\n\n')
     wiki_page.write('This page was created with [Wiki Content Generator](https://github.com/Bedrock-OSS/bedrock-wiki-content-generator). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.\n')
     if is_full:
-        wiki_page.write(f'Includes all examples. Namespace `minecraft` was removed.')
+        wiki_page.write(f'Includes all examples. Namespace `minecraft` and some formatting have been removed to make the page load quickly.')
     else:
         wiki_page.write(f'Note that not more than {example_amount} examples are shown for each component to keep this page fast to load. Namespace `minecraft` was also removed.\n')
         wiki_page.write('If you want to see full page, you can do it [here](/items/vui-full).') # not affected through main.py
     wiki_page.write(f' {version}\n\n')
     for component_name in sorted(components_data):
         wiki_page.write('## '+component_name.replace('minecraft:', '')+'\n\n')
-        wiki_page.write('<Spoiler title="Show">\n\n')
+        if not is_full: wiki_page.write('<Spoiler title="Show">\n\n')
         component_usage_counter = 0
         current_item = ''
         for example in components_data[component_name]:
             if current_item != example['item']:
                 current_item = example['item']
                 wiki_page.write(example['item'].replace('minecraft:', '')+'\n\n')
-            wiki_page.write('<CodeHeader></CodeHeader>\n\n')
+            if not is_full: wiki_page.write('<CodeHeader></CodeHeader>\n\n')
             wiki_page.write('```json\n')
             wiki_page.write(f'"{component_name}": {json.dumps(example[component_name], indent=4)}\n')
             wiki_page.write('```\n\n')
             component_usage_counter += 1
             if component_usage_counter == example_amount:
                 break
-        wiki_page.write('</Spoiler>\n\n')
-    print('Updated Vanilla Usage Items!' + ' (full)'*(not bool(example_amount+1)))
+        if not is_full: wiki_page.write('</Spoiler>\n\n')
+    print('Updated Vanilla Usage Items!' + ' (full)'*is_full)
 
 def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, example_amount: int, entity_example_amount: int) -> None:
     """Generates and writes vanilla usage components: https://wiki.bedrock.dev/entities/vanilla-usage-components.html.
     Example amount is max amount of examples for component from different entities, entity example amount - max amount of examples from entity. Use -1 to bypass."""
-    if entity_example_amount == -1:
-        is_full = True
-    else:
-        is_full = False
+    is_full = example_amount == -1 and entity_example_amount == -1
     components_data = {}
     for item_filename in listdir(path.join(bp_path, 'entities')):
         with open(path.join(bp_path, 'entities', item_filename)) as entity_file:
@@ -309,38 +292,33 @@ def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, exampl
             component_usage['entity'] = entity_data.get('minecraft:entity', {}).get('description', {}).get('identifier', f'minecraft:{item_filename.replace(".json", "")}')
             component_usage[component_name] = component_data
             components_data[component_name].append(component_usage)
-        if 'component_groups' in entity_data['minecraft:entity']:
-            for component_group in entity_data['minecraft:entity']['component_groups']:
-                for component_name, component_data in entity_data['minecraft:entity']['component_groups'][component_group].items():
-                    if component_name not in components_data:
-                        components_data[component_name] = []
-                    component_usage = {}
-                    component_usage['entity'] = entity_data['minecraft:entity']['description']['identifier']
-                    component_usage['component_group'] = component_group
-                    component_usage[component_name] = component_data
-                    components_data[component_name].append(component_usage)
+        for component_group in entity_data['minecraft:entity'].get('component_groups', {}):
+            for component_name, component_data in entity_data['minecraft:entity']['component_groups'][component_group].items():
+                if component_name not in components_data:
+                    components_data[component_name] = []
+                component_usage = {}
+                component_usage['entity'] = entity_data['minecraft:entity']['description']['identifier']
+                component_usage['component_group'] = component_group
+                component_usage[component_name] = component_data
+                components_data[component_name].append(component_usage)
     wiki_page = open(wiki_page_path, 'w')
     wiki_page.write('---\n')
-    if is_full:
-        wiki_page.write('title: Vanilla Usage Components - Full\n')
-    else:
-        wiki_page.write('title: Vanilla Usage Components\n')
+    wiki_page.write(f'title: Vanilla Usage Components{" - Full"*is_full}\n')
     wiki_page.write('category: Documentation\n')
     wiki_page.write('mentions:\n')
     wiki_page.write('    - MedicalJewel105\n')
-    if is_full:
-        wiki_page.write('hidden: true\n')
+    if is_full: wiki_page.write('hidden: true\n')
     wiki_page.write('---\n\n')
     wiki_page.write('This page was created with [Wiki Content Generator](https://github.com/Bedrock-OSS/bedrock-wiki-content-generator). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.\n')
     if is_full:
-        wiki_page.write(f'Includes all examples. Namespace `minecraft` was removed.')
+        wiki_page.write(f'Includes all examples. Namespace `minecraft` and some formatting have been removed to make the page load quickly.')
     else:
         wiki_page.write(f'Note that to keep this page fast to load and informative, there are not more than {example_amount} examples for each component and not more than {entity_example_amount} example(s) from each entity are shown. Namespace `minecraft` was also removed.\n')
         wiki_page.write('If you want to see full page, you can do it [here](/entities/vuc-full).') # not affected through main.py
     wiki_page.write(f' {version}\n\n')
     for component_name in sorted(components_data):
         wiki_page.write('## '+component_name.replace('minecraft:', '')+'\n\n')
-        wiki_page.write('<Spoiler title="Show">\n\n')
+        if not is_full: wiki_page.write('<Spoiler title="Show">\n\n')
         component_usage_counter = 0
         entity_component_usage_counter = 0
         current_entity = ''
@@ -352,9 +330,9 @@ def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, exampl
             else:
                 entity_component_usage_counter += 1
             if entity_component_usage_counter < entity_example_amount or is_full:
-                if 'component_group' in example:
+                if 'component_group' in example and not is_full:
                     wiki_page.write(f'<CodeHeader>#component_groups/{example["component_group"]}</CodeHeader>\n\n')
-                else:
+                elif not is_full:
                     wiki_page.write('<CodeHeader></CodeHeader>\n\n')
                 wiki_page.write('```json\n')
                 wiki_page.write(f'"{component_name}": {json.dumps(example[component_name], indent=4)}\n')
@@ -362,5 +340,5 @@ def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, exampl
                 component_usage_counter += 1
             if component_usage_counter == example_amount:
                 break
-        wiki_page.write('</Spoiler>\n\n')
-    print('Updated Vanilla Usage Entities!' + ' (full)'*(not bool((example_amount+1)*(entity_example_amount+1))))
+        if not is_full: wiki_page.write('</Spoiler>\n\n')
+    print('Updated Vanilla Usage Entities!' + ' (full)'*is_full)
