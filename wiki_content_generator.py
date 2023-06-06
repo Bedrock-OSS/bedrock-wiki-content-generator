@@ -205,7 +205,7 @@ def generate_vu_spawn_rules(bp_path: str, version: str, wiki_page_path: str, exa
     wiki_page.write('---\n\n')
     wiki_page.write('This page was created with [Wiki Content Generator](https://github.com/Bedrock-OSS/bedrock-wiki-content-generator). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.\n')
     if is_full:
-        wiki_page.write(f'Includes all examples. Namespace `minecraft` and some formatting has been removed to make the page load quickly.')
+        wiki_page.write('Includes all examples. Namespace `minecraft` and some formatting has been removed to make the page load quickly.')
     else:
         wiki_page.write(f'Note that not more than {example_amount} examples are shown for each component to keep this page fast to load. Namespace `minecraft` was also removed.')
         wiki_page.write('If you want to see full page, you can do it [here](/entities/vusr-full).') # not affected through main.py
@@ -253,7 +253,7 @@ def generate_vu_items(bp_path: str, version: str, wiki_page_path: str, example_a
     wiki_page.write('---\n\n')
     wiki_page.write('This page was created with [Wiki Content Generator](https://github.com/Bedrock-OSS/bedrock-wiki-content-generator). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.\n')
     if is_full:
-        wiki_page.write(f'Includes all examples. Namespace `minecraft` and some formatting have been removed to make the page load quickly.')
+        wiki_page.write('Includes all examples. Namespace `minecraft` and some formatting have been removed to make the page load quickly.')
     else:
         wiki_page.write(f'Note that not more than {example_amount} examples are shown for each component to keep this page fast to load. Namespace `minecraft` was also removed.\n')
         wiki_page.write('If you want to see full page, you can do it [here](/items/vui-full).') # not affected through main.py
@@ -311,9 +311,9 @@ def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, exampl
     wiki_page.write('---\n\n')
     wiki_page.write('This page was created with [Wiki Content Generator](https://github.com/Bedrock-OSS/bedrock-wiki-content-generator). If there are issues, contact us on [Bedrock OSS](https://discord.gg/XjV87YN) Discord server.\n')
     if is_full:
-        wiki_page.write(f'Includes all examples. Namespace `minecraft` and some formatting have been removed to make the page load quickly.')
+        wiki_page.write('Includes all examples. Namespace `minecraft` and some formatting have been removed to make the page load quickly.')
     else:
-        wiki_page.write(f'Note that to keep this page fast to load and informative, there are not more than {example_amount} examples for each component and not more than {entity_example_amount} example(s) from each entity are shown. Namespace `minecraft` was also removed.\n')
+        wiki_page.write(f'Note that to keep this page fast to load and informative, there are not more than {example_amount} example(s) for each component and not more than {entity_example_amount} example(s) from each entity are shown. Namespace `minecraft` was also removed.\n')
         wiki_page.write('If you want to see full page, you can do it [here](/entities/vuc-full).') # not affected through main.py
     wiki_page.write(f' {version}\n\n')
     for component_name in sorted(components_data):
