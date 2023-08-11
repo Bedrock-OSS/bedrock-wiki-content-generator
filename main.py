@@ -17,6 +17,8 @@ The scripts uses temporary path `packs`. The path is not cleared after the
 execution, it conditionally removed and added again at the start of the script.
 """
 
+# LMAO, absolutely unreadable code xD
+
 import wiki_tools
 import wiki_content_generator as wcg
 from tkinter import filedialog

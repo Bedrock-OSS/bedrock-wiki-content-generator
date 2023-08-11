@@ -29,7 +29,11 @@ def get_block_sounds(rp_path: str, version: str) -> str:
     block_sounds = sorted(list(set(block_sounds)))
     for excluding_sound in invalid_values:
         block_sounds.remove(excluding_sound)
-    page_content = f'```json\n{json.dumps(block_sounds, indent=4)}\n```\n{version}'
+    block_sounds = [version] + block_sounds
+    # as table:
+    page_content = wiki_tools.table(0, block_sounds)
+    # as json list:
+    # page_content = f'```json\n{json.dumps(block_sounds, indent=4)}\n```\n{version}'
     return page_content
 
 def can_place_on_everything(rp_path: str, version: str) -> str:
