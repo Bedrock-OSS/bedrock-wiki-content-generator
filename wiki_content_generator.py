@@ -58,7 +58,7 @@ def get_creative_categories_table(rp_path: str, version: str) -> list:
     """Generates table for https://wiki.bedrock.dev/documentation/creative-categories.html#list-of-creative-categories"""
     lines_with_categories = []
     categories = []
-    with open(path.join(rp_path, 'texts', 'en_US.lang'), 'r') as lang_file:
+    with open(path.join(rp_path, 'texts', 'en_US.lang'), 'r', encoding='UTF-8') as lang_file:
         for line in lang_file:
             if "itemGroup.name." in line:
                 lines_with_categories.append(line)
@@ -75,7 +75,7 @@ def get_fogs_table(rp_path: str, version: str) -> list:
     fogs_table = []
     biome_names = []
     fog_ids = []
-    with open(path.join(rp_path, 'biomes_client.json'), 'r') as biomes_client:
+    with open(path.join(rp_path, 'biomes_client.json'), 'r', encoding='UTF-8') as biomes_client:
         biomes_client_data = json.load(biomes_client)
     for biome_name, biome_data in biomes_client_data['biomes'].items():
         biome_names.append(biome_name)
@@ -289,7 +289,9 @@ def generate_vu_entities(bp_path: str, version: str, wiki_page_path: str, exampl
     for item_filename in listdir(path.join(bp_path, 'entities')):
         with open(path.join(bp_path, 'entities', item_filename)) as entity_file:
             entity_data = json.load(entity_file, cls=jsonc_decoder.JSONCDecoder)
-        for component_name, component_data in entity_data['minecraft:entity']['components'].items():
+        for component_name, component_data in entity_data.get('minecraft:entity', {}).get('components', {}).items():
+            # if not bool(component_name or component_data):
+            #     continue
             if component_name not in components_data:
                 components_data[component_name] = []
             component_usage = {}

@@ -70,6 +70,12 @@ def main() -> None:
         download_file(DOWNLOAD_LINK, repo_save_path)
         print('Downloaded!')
 
+    print('Removing old files if exist...')
+    packs_contents = listdir('packs')
+    for element in packs_contents:
+        if element != 'vp.zip':
+            shutil.rmtree(path.join('packs', element), True)
+
     print('Extracting files...')
     with ZipFile(repo_save_path) as unzipping_file:
         unzipping_file.extractall('packs')
