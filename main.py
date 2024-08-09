@@ -17,7 +17,7 @@ The scripts uses temporary path `packs`. The path is not cleared after the
 execution, it conditionally removed and added again at the start of the script.
 """
 
-# LMAO, absolutely unreadable code xD
+# Absolutely unreadable code xD
 
 import wiki_tools
 import wiki_content_generator as wcg
@@ -48,6 +48,12 @@ def launch() -> None:
     SKIP_DOWNLOAD = '--skip_download' in argv
     main()
 
+def clear_folders(parent_folder_name) -> None:
+    """Clears folder from other folders."""
+    contents = listdir(parent_folder_name)
+    for element in contents:
+        if not element.endswith('.zip'):
+            shutil.rmtree(path.join(parent_folder_name, element), True)
 
 def main() -> None:
     # Set some variables
@@ -70,12 +76,11 @@ def main() -> None:
         print('Downloaded!')
 
     print('Removing old files if exist...')
-    packs_contents = listdir('packs')
-    for element in packs_contents:
-        if not element.endswith('.zip'):
-            shutil.rmtree(path.join('packs', element), True)
+    clear_folders('packs')
+    clear_folders('custom_data')
+    print('Removed!')
 
-    print('Extracting files...')
+    print('Extracting vanilla files...')
     with ZipFile(repo_save_path) as unzipping_file:
         unzipping_file.extractall('packs')
     print('Extracted!')
@@ -92,13 +97,11 @@ def main() -> None:
 
     shutil.rmtree(path.join('packs', extracted_folder))
 
-    # Extract custom data
+    print('Extracting custom data...')
     for element in listdir(custom_data_path):
-        if not element.endswith('.zip'):
-            shutil.rmtree(path.join(custom_data_path, element))
-        else:
-            with ZipFile(path.join(custom_data_path, element)) as unzipping_file:
-                unzipping_file.extractall(path.join(custom_data_path, element.replace('.zip', '')))
+        with ZipFile(path.join(custom_data_path, element)) as unzipping_file:
+            unzipping_file.extractall(path.join(custom_data_path, element.replace('.zip', '')))
+    print('Extracted!')
 
     # Wiki repo folder local path
     if path.exists(wiki_path_file):
@@ -133,12 +136,14 @@ def main() -> None:
     print(version)
 
     # Remove files
+    print('Removing unneeded contents...')
     shutil.rmtree(rp_path)
     shutil.rmtree(bp_path)
     custom_data_contents = listdir(custom_data_path)
     for element in custom_data_contents:
         if not element.endswith('.zip'):
             shutil.rmtree(path.join(custom_data_path, element), True)
+    print('Removed!')
 
     print('Finished!')
 

@@ -130,34 +130,44 @@ def generate_sound_definitions(rp_path: str, version: str, wiki_page_path: str) 
 
 def generate_biome_tags_tables(biomes_folder_path: str, version: str, wiki_page_path: str) -> None:
     """Generates and writes tables for https://wiki.bedrock.dev/world-generation/biome-tags.html"""
-    all_biome_data = {}
+    biome_tags_per_biome = {}
+    # Structure:
+    # biome_tags_per_biome = {
+    #     "bamboo_jungle": [ (<- biome_tags_list)
+    #       "animal",
+    #       "bamboo",
+    #       "jungle",
+    #       "monster",
+    #       "overworld"
+    #     ]
+    # }
     table_1_biome_id = ['Biome']
     table_1_biome_tags = ['Biome Tags']
     table_2_biome_tags = ['Biome Tag']
     table_2_biomes = ['Biomes']
     all_biome_tags = []
     for biome_filename in listdir(biomes_folder_path):
-        all_biome_data[biome_filename.replace('.biome.json', '')] = []
+        biome_tags_per_biome[biome_filename.replace('.biome.json', '')] = []
         with open(path.join(biomes_folder_path, biome_filename)) as biome_file:
             biome_data = json.load(biome_file, cls=jsonc_decoder.JSONCDecoder)
         biome_id = biome_data['minecraft:biome']['description']['identifier']
         table_1_biome_id.append(biome_id)
-        biome_tags = ', '
-        for biome_component_name in biome_data['minecraft:biome']['components']:
-            if ':' not in biome_component_name and biome_data['minecraft:biome']['components'][biome_component_name] == {}:
-                biome_tags += biome_component_name + ', '
-                all_biome_tags.append(biome_component_name)
-                all_biome_data[biome_filename.replace('.biome.json', '')].append(biome_component_name)
-        table_1_biome_tags.append(biome_tags.strip(', '))
+        biome_tags = biome_data['minecraft:biome'].get('components', {}).get('minecraft:tags', {}).get('tags', [])
+        all_biome_tags += biome_tags
+        biome_tags_per_biome[biome_filename.replace('.biome.json', '')].append(biome_tags)
+        biome_tags_str = ', '.join(sorted(set(biome_tags)))
+        table_1_biome_tags.append(biome_tags_str)
     biome_tag_per_biome = wiki_tools.table(0, table_1_biome_id, table_1_biome_tags)
+
     all_biome_tags = sorted(set(all_biome_tags))
     for biome_tag in all_biome_tags:
         table_2_biome_tags.append(biome_tag)
-        matching_biomes = ', '
-        for biome_name, biome_tags_list in all_biome_data.items():
+        matching_biomes = []
+        for data_tuple in biome_tags_per_biome.items():
+            biome_name, biome_tags_list = data_tuple[0], data_tuple[1][0]
             if biome_tag in biome_tags_list:
-                matching_biomes += biome_name + ', '
-        table_2_biomes.append(matching_biomes.strip(', '))
+                matching_biomes.append(biome_name)
+        table_2_biomes.append(', '.join(matching_biomes))
     biome_per_biome_tag = wiki_tools.table(0, table_2_biome_tags, table_2_biomes)
     wiki_page = open(wiki_page_path, 'w')
     wiki_page.write('---\n')
