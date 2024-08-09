@@ -58,7 +58,6 @@ def main() -> None:
     wiki_path_file = 'wiki_local_path.txt'
     is_stable = DOWNLOAD_MODE == 'stable'
     custom_data_path = 'custom_data'
-    # test page path:
     # test_page_path = 'test-page.md'
     
     # Download & extract packs
@@ -73,7 +72,7 @@ def main() -> None:
     print('Removing old files if exist...')
     packs_contents = listdir('packs')
     for element in packs_contents:
-        if element != 'vp.zip':
+        if not element.endswith('.zip'):
             shutil.rmtree(path.join('packs', element), True)
 
     print('Extracting files...')
@@ -94,12 +93,12 @@ def main() -> None:
     shutil.rmtree(path.join('packs', extracted_folder))
 
     # Extract custom data
-    for element in listdir('custom_data'):
+    for element in listdir(custom_data_path):
         if not element.endswith('.zip'):
-            shutil.rmtree(path.join('custom_data', element))
+            shutil.rmtree(path.join(custom_data_path, element))
         else:
-            with ZipFile(path.join('custom_data', element)) as unzipping_file:
-                unzipping_file.extractall(path.join('custom_data', element.replace('.zip', '')))
+            with ZipFile(path.join(custom_data_path, element)) as unzipping_file:
+                unzipping_file.extractall(path.join(custom_data_path, element.replace('.zip', '')))
 
     # Wiki repo folder local path
     if path.exists(wiki_path_file):
@@ -136,6 +135,11 @@ def main() -> None:
     # Remove files
     shutil.rmtree(rp_path)
     shutil.rmtree(bp_path)
+    custom_data_contents = listdir(custom_data_path)
+    for element in custom_data_contents:
+        if not element.endswith('.zip'):
+            shutil.rmtree(path.join(custom_data_path, element), True)
+
     print('Finished!')
 
 
