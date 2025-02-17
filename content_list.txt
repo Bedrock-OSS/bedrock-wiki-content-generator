@@ -1,6 +1,6 @@
 1. get_block_sounds - Generates list with all possible values for 'sound' in blocks.json. Used in https://wiki.bedrock.dev/blocks/block-sounds.html
 2. can_place_on_everything - Generates a commands wrapped in codeheader for https://wiki.bedrock.dev/commands/nbt-commands.html#canplaceon-everything
-3. get_creative_categories_table - Generates table for https://wiki.bedrock.dev/documentation/creative-categories.html#list-of-creative-categories
+3. get_creative_categories_table - Generates table for https://wiki.bedrock.dev/documentation/menu-categories.html#list-of-groups
 4. get_fogs_table - Generates table for https://wiki.bedrock.dev/documentation/fog-ids.html#auto-generated
 5. generate_sound_definitions - Generates and writes data for https://wiki.bedrock.dev/documentation/sound-definitions.html
 6. generate_biome_tags_table - Generates and writes tables for https://wiki.bedrock.dev/world-generation/biome-tags.html

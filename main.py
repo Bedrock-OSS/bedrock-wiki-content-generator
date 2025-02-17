@@ -75,7 +75,7 @@ def main() -> None:
         download_file(DOWNLOAD_LINK, repo_save_path)
         print('Downloaded!')
 
-    print('Removing old files if exist...')
+    print('Removing old files if they exist...')
     clear_folders('packs')
     clear_folders('custom_data')
     print('Removed!')
@@ -123,7 +123,7 @@ def main() -> None:
     custom_data_version = wcg.get_custom_data_version()
     wiki_tools.upload_content(path.join(wiki_path, 'docs', 'blocks', 'block-sounds.md'), wcg.get_block_sounds(rp_path, version)) # block sounds
     wiki_tools.upload_content(path.join(wiki_path, 'docs', 'commands', 'nbt-commands.md'), wcg.can_place_on_everything(rp_path, version)) # can_place_on_everything
-    wiki_tools.upload_content(path.join(wiki_path, 'docs', 'documentation', 'creative-categories.md'), wcg.get_creative_categories_table(rp_path, version)) # creative categories
+    wiki_tools.upload_content(path.join(wiki_path, 'docs', 'documentation', 'menu-categories.md'), wcg.get_creative_categories_table(rp_path, version)) # creative categories
     wiki_tools.upload_content(path.join(wiki_path, 'docs', 'documentation', 'fog-ids.md'), wcg.get_fogs_table(rp_path, version)) # fog ids
     wcg.generate_sound_definitions(rp_path, version, path.join(wiki_path, 'docs', 'documentation', 'sound-definitions.md')) # sound definitions
     wcg.generate_biome_tags_tables(path.join(custom_data_path, 'biomes'), custom_data_version, path.join(wiki_path, 'docs', 'world-generation', 'biome-tags.md')) # biome and tags tables
